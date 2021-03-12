@@ -122,22 +122,12 @@ export class ListPage implements OnInit {
 
 
   sort(type, value) {
-    if (type == 'Name' || type == 'Email') {
+    if (type == 'Name' || type == 'Email' || type == 'Gender') {
       this.userList = this.userListSearch.sort(function (a, b) {
         var x = a['userData'][type]; var y = b['userData'][type];
         return ((x < y) ? -1 : ((x > y) ? 1 : 0));
       });
       if (value == 'asc') {
-        this.userList.reverse();
-      }
-      else { }
-    }
-    else if (type == 'Gender') {
-      this.userList = this.userListSearch.sort(function (a, b) {
-        var x = a['userData'][type]; var y = b['userData'][type];
-        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-      });
-      if (value == 'desc') {
         this.userList.reverse();
       }
       else { }
@@ -152,8 +142,6 @@ export class ListPage implements OnInit {
       }
       else { }
     }
-
-
   }
 
   ngOnInit() {
