@@ -16,12 +16,9 @@ export class HomePage implements OnInit {
   constructor(public fb: FormBuilder, private api: ApiService, private router: Router, private route: ActivatedRoute) {
     this.route.queryParams.subscribe(data => {
       this.api.presentLoading();
-      console.log(data);
       if (data.id != undefined) {
-        console.log(data.id);
         this.user_id = data.id;
         this.api.Get(data.id).then(data => {
-          console.log(data);
           this.data = data;
           this.userForm = this.fb.group({
             name: [this.data.Name, [Validators.required]],
@@ -38,7 +35,6 @@ export class HomePage implements OnInit {
             this.show_form = true;
           }, 1000)
         }).catch(d => {
-          console.log(d);
           setTimeout(() => {
             this.api.dismissLoading();
             this.show_form = true;
@@ -48,7 +44,6 @@ export class HomePage implements OnInit {
 
       }
       else {
-        console.log('else');
         this.userForm = this.fb.group({
           name: ['', [Validators.required]],
           email: ['', [Validators.required, Validators.email]],
@@ -74,7 +69,6 @@ export class HomePage implements OnInit {
 
   CreateUser() {
     this.api.presentLoading();
-    console.log(this.userForm.value);
     let input = {
       "Name": this.userForm.value.name,
       "Email": this.userForm.value.email,
@@ -88,7 +82,6 @@ export class HomePage implements OnInit {
       }
     }
     this.api.Post(input).then(data => {
-      console.log(data);
       this.api.user.emit();
       this.api.presentToast("User successfully created");
       setTimeout(() => {
@@ -107,7 +100,6 @@ export class HomePage implements OnInit {
 
   UpdateUser() {
     this.api.presentLoading();
-    console.log(this.userForm.value);
     let input = {
       "Name": this.userForm.value.name,
       "Email": this.userForm.value.email,
@@ -121,15 +113,13 @@ export class HomePage implements OnInit {
       }
     }
     this.api.Update(this.user_id, input).then(data => {
-      console.log(data);
       this.api.user.emit();
-      this.api.presentToast("User successfully created");
+      this.api.presentToast("User successfully updated");
       setTimeout(() => {
         this.api.dismissLoading();
         this.router.navigate(['list']);
       }, 1000);
     }).catch(d => {
-      console.log(d);
       this.api.presentToast("Please try again later");
       setTimeout(() => {
         this.api.dismissLoading();

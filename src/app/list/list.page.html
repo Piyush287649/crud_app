@@ -9,21 +9,25 @@
 <ion-content>
   <ion-searchbar animated (ionChange)='onInput($event)' placeholder="Search by name"></ion-searchbar>
 
-  <ion-lable class="sort">Sort By</ion-lable>
+  <ion-label class="sort">Sort By</ion-label>
 
   <ion-segment>
     <ion-segment-button value="Name" (click)="segmentChanged('Name')">
       <ion-label>Name</ion-label>
     </ion-segment-button>
+
     <ion-segment-button value="Email" (click)="segmentChanged('Email')">
       <ion-label>Email</ion-label>
     </ion-segment-button>
+
     <ion-segment-button value="Gender" (click)="segmentChanged('Gender')">
       <ion-label>Gender</ion-label>
     </ion-segment-button>
+
     <ion-segment-button value="Country" (click)="segmentChanged('Country')">
       <ion-label>Country</ion-label>
     </ion-segment-button>
+
   </ion-segment>
   <ion-button (click)="CreateUser()" color="success">
     <ion-icon size="small" slot="icon-only" name="add"></ion-icon>

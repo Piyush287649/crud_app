@@ -20,25 +20,27 @@ export class ListPage implements OnInit {
   }
 
   getUsers() {
+    this.api.presentLoading();
     this.userList = [];
     this.userList = [];
     this.api.Get(null).then(data => {
-      console.log(data);
       if (data != null) {
         this.empty = false;
         Object.entries(data).map(item => {
           this.userList.push({ id: item[0], userData: item[1] });
         })
-
         this.userListSearch = this.userList;
-        console.log(this.userList);
       }
       else {
         this.empty = true;
       }
-      console.log(this.userList);
+      setTimeout(() => {
+        this.api.dismissLoading();
+      }, 1000)
     }).catch(d => {
-      console.log(d);
+      setTimeout(() => {
+        this.api.dismissLoading();
+      }, 1000)
     })
   }
 
@@ -47,12 +49,10 @@ export class ListPage implements OnInit {
   }
 
   DeleteUser(id) {
-    console.log(id);
     this.api.presentLoading();
     this.api.Delete(id).then(data => {
-      console.log(data);
       setTimeout(() => {
-        this.api.presentToast("Successfully deleted");
+        this.api.presentToast("User successfully deleted");
         this.api.dismissLoading();
       }, 1000);
       this.getUsers();
@@ -74,7 +74,7 @@ export class ListPage implements OnInit {
       this.userList = this.userListSearch;
     } else {
       this.userList = this.userListSearch.filter(e => {
-        var name = e[1].Name.toLowerCase();
+        var name = e['userData'].Name.toLowerCase();
         var value = evt.target.value.toLowerCase();
         return name.includes(value);
       });
@@ -111,8 +111,6 @@ export class ListPage implements OnInit {
         }, {
           text: 'Ok',
           handler: (value) => {
-            console.log(type);
-            console.log(value);
             this.sort(type, value);
           }
         }
@@ -122,8 +120,9 @@ export class ListPage implements OnInit {
     await alert.present();
   }
 
+
   sort(type, value) {
-    if (type == 'Name' || type == 'Email' || type == 'Gender') {
+    if (type == 'Name' || type == 'Email') {
       this.userList = this.userListSearch.sort(function (a, b) {
         var x = a['userData'][type]; var y = b['userData'][type];
         return ((x < y) ? -1 : ((x > y) ? 1 : 0));
@@ -133,9 +132,19 @@ export class ListPage implements OnInit {
       }
       else { }
     }
+    else if (type == 'Gender') {
+      this.userList = this.userListSearch.sort(function (a, b) {
+        var x = a['userData'][type]; var y = b['userData'][type];
+        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+      });
+      if (value == 'desc') {
+        this.userList.reverse();
+      }
+      else { }
+    }
     else {
       this.userList = this.userListSearch.sort(function (a, b) {
-        var x = a['userData']['Address'][type]; var y = b['userData'][type];
+        var x = a['userData']['Address'][type]; var y = b['userData']['Address'][type];
         return ((x < y) ? -1 : ((x > y) ? 1 : 0));
       });
       if (value == 'asc') {
