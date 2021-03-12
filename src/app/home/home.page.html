@@ -1,0 +1,77 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="warning">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Create User
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding" *ngIf="show_form">
+
+  <form [formGroup]="userForm">
+
+    <ion-item>
+      <ion-label position="floating">Name</ion-label>
+      <ion-input formControlName="name"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input formControlName="email"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Phone No</ion-label>
+      <ion-input formControlName="phone_no"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Gender</ion-label>
+      <ion-select formControlName="gender">
+        <ion-select-option value="female">Female</ion-select-option>
+        <ion-select-option value="male">Male</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Street</ion-label>
+      <ion-input formControlName="street"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">City</ion-label>
+      <ion-input formControlName="city"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Zip Code</ion-label>
+      <ion-input formControlName="zip_code"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Country</ion-label>
+      <ion-input formControlName="country"></ion-input>
+    </ion-item>
+
+    <ion-item *ngIf="data==null">
+      <ion-button (click)="CreateUser()" [disabled]="userForm.invalid">
+        <ion-icon size="small" slot="icon-only" name="add"></ion-icon>
+        &nbsp;Create User
+      </ion-button>
+    </ion-item>
+
+    <ion-item *ngIf="data!=null">
+      <ion-button (click)="UpdateUser()" [disabled]="userForm.invalid">
+        <ion-icon size="small" slot="icon-only" name="add"></ion-icon>
+        &nbsp;Update User
+      </ion-button>
+    </ion-item>
+
+  </form>
+
+
+
+</ion-content>
