@@ -57,7 +57,7 @@
     </ion-item>
 
     <ion-item *ngIf="data==null">
-      <ion-button (click)="CreateUser()" [disabled]="userForm.invalid">
+      <ion-button (click)="CreateUser()" [disabled]="userForm.invalid" color="success">
         <ion-icon size="small" slot="icon-only" name="add"></ion-icon>
         &nbsp;Create User
       </ion-button>
@@ -65,7 +65,7 @@
 
     <ion-item *ngIf="data!=null">
       <ion-button (click)="UpdateUser()" [disabled]="userForm.invalid">
-        <ion-icon size="small" slot="icon-only" name="add"></ion-icon>
+        <ion-icon size="small" slot="icon-only" name="pencil"></ion-icon>
         &nbsp;Update User
       </ion-button>
     </ion-item>
