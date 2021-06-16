@@ -8,73 +8,55 @@ import { ApiService } from '../services/api.service';
   templateUrl: './list.page.html',
   styleUrls: ['./list.page.scss'],
 })
-export class ListPage implements OnInit {
-  userList: any = [];
+export class ListPage {
+  noteList: any = [];
   empty: boolean = false;
-  userListSearch: any = [];
-  constructor(private api: ApiService, private router: Router, public alertController: AlertController) {
-    this.getUsers();
-    this.api.user.subscribe(data => {
-      this.getUsers();
-    })
+  noteListSearch: any = [];
+  constructor(
+    private api: ApiService,
+    private router: Router,
+    public alertController: AlertController
+  ) {
+    this.getNotes();
+    this.api.note.subscribe((data) => {
+      this.getNotes();
+    });
   }
 
-  getUsers() {
-    this.api.presentLoading();
-    this.userList = [];
-    this.userList = [];
-    this.api.Get(null).then(data => {
-      if (data != null) {
-        this.empty = false;
-        Object.entries(data).map(item => {
-          this.userList.push({ id: item[0], userData: item[1] });
-        })
-        this.userListSearch = this.userList;
-      }
-      else {
-        this.empty = true;
-      }
-      setTimeout(() => {
-        this.api.dismissLoading();
-      }, 1000)
-    }).catch(d => {
-      setTimeout(() => {
-        this.api.dismissLoading();
-      }, 1000)
-    })
+  getNotes() {
+    this.noteList = this.api.getNotes();
+    this.noteListSearch = this.noteList;
   }
 
-  CreateUser() {
+  Createnote() {
     this.router.navigate(['home']);
   }
 
-  DeleteUser(id) {
-    this.api.presentLoading();
-    this.api.Delete(id).then(data => {
-      setTimeout(() => {
-        this.api.presentToast("User successfully deleted");
-        this.api.dismissLoading();
-      }, 1000);
-      this.getUsers();
-    }).catch(d => {
-      console.log(d);
-      setTimeout(() => {
-        this.api.presentToast("Please try again");
-        this.api.dismissLoading();
-      }, 1000);
-    })
+  Deletenote(id) {
+    if (this.noteListSearch.length === 1) {
+      let result = this.noteListSearch.find((note) => note.id == id);
+      if (result) {
+        this.noteListSearch = [];
+        this.noteList = [];
+        localStorage.removeItem('notes');
+      }
+    } else {
+      this.noteListSearch = this.noteListSearch.splice(id, 1);
+      this.noteList = this.noteListSearch;
+      this.api.setNotes(this.noteListSearch);
+    }
   }
 
-  UpdateUser(id) {
-    this.router.navigate(['home'], { queryParams: { id: id } })
+  Updatenote(id) {
+    this.router.navigate(['home'], { queryParams: { id: id } });
   }
 
   onInput(evt) {
     if (!evt.target.value) {
-      this.userList = this.userListSearch;
+      this.noteList = this.noteListSearch;
     } else {
-      this.userList = this.userListSearch.filter(e => {
-        var name = e['userData'].Name.toLowerCase();
+      this.noteList = this.noteListSearch.filter((e) => {
+        var name = e.title.toLowerCase();
         var value = evt.target.value.toLowerCase();
         return name.includes(value);
       });
@@ -93,58 +75,45 @@ export class ListPage implements OnInit {
           type: 'radio',
           label: 'asc',
           value: 'asc',
-          checked: true
+          checked: true,
         },
         {
           name: 'desc',
           type: 'radio',
           label: 'desc',
-          value: 'desc'
-        }],
+          value: 'desc',
+        },
+      ],
       buttons: [
         {
           text: 'Cancel',
           role: 'cancel',
           cssClass: 'secondary',
-          handler: () => {
-          }
-        }, {
+          handler: () => {},
+        },
+        {
           text: 'Ok',
           handler: (value) => {
             this.sort(type, value);
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
 
     await alert.present();
   }
 
-
   sort(type, value) {
-    if (type == 'Name' || type == 'Email' || type == 'Gender') {
-      this.userList = this.userListSearch.sort(function (a, b) {
-        var x = a['userData'][type]; var y = b['userData'][type];
-        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+    if (type == 'title' || type == 'content') {
+      this.noteList = this.noteListSearch.sort(function (a, b) {
+        var x = a[type];
+        var y = b[type];
+        return x < y ? -1 : x > y ? 1 : 0;
       });
       if (value == 'asc') {
-        this.userList.reverse();
+      } else {
+        this.noteList.reverse();
       }
-      else { }
-    }
-    else {
-      this.userList = this.userListSearch.sort(function (a, b) {
-        var x = a['userData']['Address'][type]; var y = b['userData']['Address'][type];
-        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-      });
-      if (value == 'asc') {
-        this.userList.reverse();
-      }
-      else { }
     }
   }
-
-  ngOnInit() {
-  }
-
 }

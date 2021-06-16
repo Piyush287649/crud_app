@@ -1,106 +1,56 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="warning">
-    <ion-title>
-      List
-    </ion-title>
+    <ion-title>Notes List </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-searchbar animated (ionChange)='onInput($event)' placeholder="Search by name"></ion-searchbar>
+  <ion-searchbar
+    animated
+    (ionChange)="onInput($event)"
+    placeholder="Search by title"
+  ></ion-searchbar>
 
   <ion-label class="sort">Sort By</ion-label>
 
   <ion-segment>
-    <ion-segment-button value="Name" (click)="segmentChanged('Name')">
-      <ion-label>Name</ion-label>
+    <ion-segment-button value="Name" (click)="segmentChanged('title')">
+      <ion-label>Title</ion-label>
     </ion-segment-button>
 
-    <ion-segment-button value="Email" (click)="segmentChanged('Email')">
-      <ion-label>Email</ion-label>
+    <ion-segment-button value="Email" (click)="segmentChanged('content')">
+      <ion-label>Content</ion-label>
     </ion-segment-button>
-
-    <ion-segment-button value="Gender" (click)="segmentChanged('Gender')">
-      <ion-label>Gender</ion-label>
-    </ion-segment-button>
-
-    <ion-segment-button value="Country" (click)="segmentChanged('Country')">
-      <ion-label>Country</ion-label>
-    </ion-segment-button>
-
   </ion-segment>
-  <ion-button (click)="CreateUser()" color="success">
+  <ion-button (click)="Createnote()" color="success">
     <ion-icon size="small" slot="icon-only" name="add"></ion-icon>
-    &nbsp;Create User
+    &nbsp;Create Note
   </ion-button>
 
   <div *ngIf="!empty">
-    <ion-card *ngFor="let user of userList">
-
-
+    <ion-card *ngFor="let note of noteList">
       <ion-item class="ion-activated">
-        <ion-label>Name</ion-label>
-        <ion-label>{{user.userData.Name}}</ion-label>
+        <ion-label>Title</ion-label>
+        <ion-label>{{note.title}}</ion-label>
       </ion-item>
 
       <ion-item>
-        <ion-label>Email</ion-label>
-        <ion-label>{{user.userData.Email}}</ion-label>
+        <ion-label>Content</ion-label>
+        <ion-label>{{note.content}}</ion-label>
       </ion-item>
 
-      <ion-item class="ion-activated">
-        <ion-label>Phone No</ion-label>
-        <ion-label>{{user.userData.Phone_no}}</ion-label>
-      </ion-item>
-
-      <ion-item>
-        <ion-label>Gender</ion-label>
-        <ion-label>{{user.userData.Gender}}</ion-label>
-      </ion-item>
-
-      <ion-label>Address</ion-label>
-
-      <ion-row>
-        <ion-col size="6">
-          <ion-item>
-            <ion-label>Street</ion-label>
-            <ion-label>{{user.userData.Address.Street}}</ion-label>
-          </ion-item>
-        </ion-col>
-        <ion-col size="6">
-          <ion-item>
-            <ion-label>City</ion-label>
-            <ion-label>{{user.userData.Address.City}}</ion-label>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-
-      <ion-row>
-        <ion-col size="6">
-          <ion-item>
-            <ion-label>ZipCode</ion-label>
-            <ion-label>{{user.userData.Address.Zip_code}}</ion-label>
-          </ion-item>
-        </ion-col>
-        <ion-col size="6">
-          <ion-item>
-            <ion-label>Country</ion-label>
-            <ion-label>{{user.userData.Address.Country}}</ion-label>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-button (click)="DeleteUser(user.id)" color="danger">
+      <ion-button (click)="Deletenote(note.id)" color="danger">
         <ion-icon size="small" slot="icon-only" name="trash"></ion-icon>
         &nbsp;Delete
       </ion-button>
 
-      <ion-button (click)="UpdateUser(user.id)">
+      <ion-button (click)="Updatenote(note.id)" class="update">
         <ion-icon size="small" slot="icon-only" name="pencil"></ion-icon>
-        &nbsp;Update User
+        &nbsp;Update
       </ion-button>
     </ion-card>
   </div>
   <div *ngIf="empty">
-    <p>No user</p>
+    <p>No note</p>
   </div>
 </ion-content>
